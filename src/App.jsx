@@ -65,13 +65,17 @@ function App() {
                 for (let i = 0; i < responses.length; i++){
                     let weeklychart = `weekly${types[i]}chart`
                     let data = responses[i].data[weeklychart][types[i]]
-                    for (let j = 0; j < 10; j++){
-                        trendObject[types[i]].push(
+                    for (let j = 0; j < data.length; j++){
+                        if (j >= 10){
+                            break;
+                        } else {
+                            trendObject[types[i]].push(
                                 {
                                     name: data[j].name,
                                     playcount: parseInt(data[j].playcount)
                                 }
                             )
+                        }
                     }
                 }
                 setTrendData(trendObject)
