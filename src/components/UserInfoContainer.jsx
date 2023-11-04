@@ -20,7 +20,6 @@ const UserInfoContainer = (props) => {
                     <Avatar size={'sm'} name={props.name} src={props.image} />
                     <Text>{props.name}</Text>
                     { props.subscriber === 1 && <Badge>Pro</Badge>}
-                    <Input ml={'auto'} size={'sm'} borderRadius={5} w={250} variant='filled' placeholder='Search for user...' />
                 </Stack>
             </Box>
             <hr/>

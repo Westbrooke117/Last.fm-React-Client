@@ -3,55 +3,47 @@ import './App.css'
 import {
     Container,
     Heading,
-    Badge,
     Stack,
-    Text,
-    Box,
     WrapItem,
     Avatar,
-    Button,
     Table,
     TableContainer,
     Tbody,
-    Tr,
-    Td,
-    Progress,
     Tabs,
     TabList,
     TabPanels,
     Tab,
     TabPanel,
-    Image,
-    StatGroup,
-    Stat,
-    StatLabel,
-    StatNumber, StatArrow, StatHelpText, Link, Flex, useColorMode, Wrap, Tooltip, LinkOverlay, LinkBox, IconButton
+    Link,
+    Wrap,
+    Tooltip,
+    LinkBox, LinkOverlay
 } from "@chakra-ui/react";
-import {ArrowRightIcon, ChevronRightIcon, MoonIcon, StarIcon, SunIcon} from "@chakra-ui/icons";
+import {ChevronRightIcon} from "@chakra-ui/icons";
 import ScrobbleContainer from "./components/ScrobbleContainer.jsx";
 import BarChartElement from "./components/BarChartElement.jsx";
 import axios from "axios";
 import UserInfoContainer from "./components/UserInfoContainer.jsx";
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
-import ScrobbleSkeleton from "./components/ScrobbleSkeleton.jsx";
 TimeAgo.addDefaultLocale(en)
 const timeAgo = new TimeAgo('en-US')
 
 
 function App() {
+    const apiKey = "82d112e473f59ade0157abe4a47d4eb5"
+
     let [user, setUser] = useState("westbrooke117")
     let [recentTracks, setRecentTracks] = useState([{}])
     let [userData, setUserData] = useState({})
     let [trendData, setTrendData] = useState({})
     let [friendData, setFriendData] = useState([{}])
-    const { colorMode, toggleColorMode } = useColorMode()
 
     useEffect(() => {
        let endpoints = [
-           `https://ws.audioscrobbler.com/2.0/?method=user.getweeklyartistchart&user=${user}&api_key=82d112e473f59ade0157abe4a47d4eb5&format=json`,
-           `https://ws.audioscrobbler.com/2.0/?method=user.getweeklyalbumchart&user=${user}&api_key=82d112e473f59ade0157abe4a47d4eb5&format=json`,
-           `https://ws.audioscrobbler.com/2.0/?method=user.getweeklytrackchart&user=${user}&api_key=82d112e473f59ade0157abe4a47d4eb5&format=json`
+           `https://ws.audioscrobbler.com/2.0/?method=user.getweeklyartistchart&user=${user}&api_key=${apiKey}&format=json`,
+           `https://ws.audioscrobbler.com/2.0/?method=user.getweeklyalbumchart&user=${user}&api_key=${apiKey}&format=json`,
+           `https://ws.audioscrobbler.com/2.0/?method=user.getweeklytrackchart&user=${user}&api_key=${apiKey}&format=json`
        ]
         let types = ['artist','album','track']
 
@@ -85,7 +77,7 @@ function App() {
     },[user])
 
     useEffect(() => {
-        axios.get(`https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${user}&api_key=82d112e473f59ade0157abe4a47d4eb5&format=json`)
+        axios.get(`https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${user}&api_key=${apiKey}&format=json`)
             .then((response) => {
                 response = response.data.user
                 setUserData(response)
@@ -94,7 +86,7 @@ function App() {
 
     useEffect(() => {
         class TrackScrobble {
-            constructor(name, artist, album, image, loved, date, nowPlaying){
+            constructor(name, artist, album, image, loved, date){
                 this.name = name;
                 this.artist = artist;
                 this.album = album;
@@ -104,7 +96,7 @@ function App() {
             }
         }
 
-        axios.get(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&api_key=82d112e473f59ade0157abe4a47d4eb5&format=json&limit=10&extended=1`)
+        axios.get(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&api_key=${apiKey}&format=json&limit=10&extended=1`)
             .then((response) => {
                  response = response.data.recenttracks.track
                 const tracks = response.map((track => {
@@ -130,7 +122,7 @@ function App() {
     },[user])
 
     useEffect(() => {
-       axios.get(`https://ws.audioscrobbler.com/2.0/?method=user.getfriends&user=${user}&api_key=82d112e473f59ade0157abe4a47d4eb5&format=json`)
+       axios.get(`https://ws.audioscrobbler.com/2.0/?method=user.getfriends&user=${user}&api_key=${apiKey}&format=json`)
            .then((response) => {
                response = response.data.friends.user
                setFriendData(response)
@@ -139,12 +131,6 @@ function App() {
 
   return (
     <div className="App">
-        {/*<IconButton className={'top-corner'}*/}
-        {/*    size={'md'}*/}
-        {/*    onClick={toggleColorMode}*/}
-        {/*    icon={colorMode === 'light' ? <MoonIcon/> : <SunIcon/>}*/}
-        {/*    aria-label={'Toggle color mode'}*/}
-        {/*/>*/}
         <Container maxW={'3xl'}>
             {userData.name && (
                 <UserInfoContainer
